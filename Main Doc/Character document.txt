@@ -1,0 +1,13 @@
+ The character in this game must avoid the patrolling enemies by staying out of their line of sight.
+ the character can interact with objects.
+ 
+ Main Character
+ moves: move forward   transform.position += currentspeed*transform.forward * Time.deltaTime;
+  move left 
+  move right 
+  move backward
+  rotate camera
+  interact with objects
+  
+  
+ 
