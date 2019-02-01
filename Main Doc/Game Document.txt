@@ -1,0 +1,13 @@
+This is a stealth game where the player has to manouvere around the environment and reach the goal while also avoiding the enemies.
+
+The enemies will follow a fixed patrol route where they will walk and stay in a position for a set time.
+
+if the player is spotted by the enemies then the player character will imediately die.
+
+There will be objects such as consoles the nplayer can interact woth to open doors and pickups such as keys.
+
+player detection will be determined if the player enters the enemis line of sight.
+
+Sound will also be a factor in player detection, if the player makes too much sound the surrounding enemis will be alerted.
+
+Sprinting will emit more sound and crouching will emit no sound.
