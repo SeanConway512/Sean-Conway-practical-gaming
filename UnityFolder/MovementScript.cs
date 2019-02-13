@@ -15,8 +15,8 @@ public class MovementScript : MonoBehaviour
     private Rigidbody SelfRigidBody;
     private bool CanJump;
     private int JumpPower = 15;
-
-
+    private bool JumpTimer, JumpTrigger;
+    
 
     // Use this for initialization
     void Start () {
@@ -31,6 +31,7 @@ public class MovementScript : MonoBehaviour
         MoveRight();
         Sprint();
         Crouch();
+
         Jump();
         Camera.main.transform.RotateAround(transform.position, Vector3.up, CameraMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
        
@@ -143,7 +144,15 @@ public class MovementScript : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            StartCoroutine(StartJumpTimer());
             CanJump = true;
         }
+    }
+    public IEnumerator StartJumpTimer()
+    {
+        JumpTrigger = false;
+        yield return new WaitForSeconds(5f);
+        JumpTrigger = true;
+
     }
 }
