@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class Interactable : MonoBehaviour {
    
-   // public Text InteractText;
+    private Text InteractText;
     private bool CanInteract = false;
-    private int distance = 2;
+    private int distance = 25;
     private GameObject player;
 
     // Use this for initialization
@@ -20,12 +20,11 @@ public class Interactable : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-       // var dist : float = Vector3.Distance(player.position, transform.position);
         interact();
     }
     public void interact()
     {
-        if (distance<=2f)
+        if (Vector3.Distance(this.transform.position,player.transform.position)<=distance)
         {
             CanInteract = true;
 
@@ -33,13 +32,13 @@ public class Interactable : MonoBehaviour {
 
             rend.material.color = Color.green;
 
-           // InteractText.text = "Press E to interact";
+            //InteractText.text = "Press E to interact";
 
-            if (Input.GetKey(KeyCode.E))
+            if (CanInteract==true && Input.GetKey(KeyCode.E))
                 {
                 rend.material.color = Color.yellow;
                 MaterialPropertyBlock console = new MaterialPropertyBlock();
-                console.AddColor("_Color",Color.yellow);    
+                console.SetColor("_Color",Color.yellow);    
                 GetComponent<Renderer>().SetPropertyBlock(console);
                 }
 
@@ -48,7 +47,7 @@ public class Interactable : MonoBehaviour {
     }
     IEnumerator getPlayer()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         player = GameObject.FindGameObjectWithTag("Player");
     } 
 }

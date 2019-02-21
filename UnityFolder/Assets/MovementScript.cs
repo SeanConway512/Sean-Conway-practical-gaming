@@ -7,16 +7,17 @@ public class MovementScript : MonoBehaviour
     /// <summary>
     /// The speed the character moves at
     /// </summary>
-    internal int MovementSpeed = 20;
+    internal int MovementSpeed=30;
     /// <summary>
     /// The speed the Camera moves at
     /// </summary>
     private float CameraMovementSpeed = 5;
     private Rigidbody SelfRigidBody;
     private bool CanJump;
-    private int JumpPower = 15;
+    private int JumpPower = 10;
     private bool JumpTimer, JumpTrigger;
-    
+    private float canJump;
+    private Vector3 velocity;
 
     // Use this for initialization
     void Start () {
@@ -31,7 +32,6 @@ public class MovementScript : MonoBehaviour
         MoveRight();
         Sprint();
         Crouch();
-
         Jump();
         Camera.main.transform.RotateAround(transform.position, Vector3.up, CameraMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
        
@@ -122,7 +122,7 @@ public class MovementScript : MonoBehaviour
         {
             MovementSpeed = 500;
         }
-        else MovementSpeed = 20;
+        else MovementSpeed = 30;
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public class MovementScript : MonoBehaviour
         {
             MovementSpeed = 5;
         }
-        else MovementSpeed = 20;
+        else MovementSpeed = 30;
     }
 
     /// <summary>
@@ -142,17 +142,20 @@ public class MovementScript : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space)&&Time.time>canJump)
         {
+            velocity = GetComponent<Rigidbody>().velocity;
+            velocity.y = JumpPower;
+            GetComponent<Rigidbody>().velocity = velocity;
+            canJump = Time.time + 1.5f;
             StartCoroutine(StartJumpTimer());
             CanJump = true;
+
         }
     }
     public IEnumerator StartJumpTimer()
     {
-        JumpTrigger = false;
-        yield return new WaitForSeconds(5f);
         JumpTrigger = true;
-
+        yield return new WaitForSeconds(5f);
     }
 }
