@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,20 +8,23 @@ public class MovementScript : MonoBehaviour
     /// <summary>
     /// The speed the character moves at
     /// </summary>
-    internal int MovementSpeed = 20;
+    internal int MovementSpeed=50;
     /// <summary>
     /// The speed the Camera moves at
     /// </summary>
     private float CameraMovementSpeed = 5;
     private Rigidbody SelfRigidBody;
     private bool CanJump;
-    private int JumpPower = 15;
+    private int JumpPower = 10;
     private bool JumpTimer, JumpTrigger;
-    
+    private float canJump;
+    private Vector3 velocity;
+    Animator animator;
 
     // Use this for initialization
     void Start () {
         SelfRigidBody = GetComponent<Rigidbody>();
+        animator = gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -31,11 +35,18 @@ public class MovementScript : MonoBehaviour
         MoveRight();
         Sprint();
         Crouch();
-
         Jump();
         Camera.main.transform.RotateAround(transform.position, Vector3.up, CameraMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime);
-       
+        
 	}
+
+    public void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.name == "EnemyGuard 1" + "EnemyGuard 2" + "EnemyGuard 3" + "EnemyGuard 4" + "EnemyGuard 5")
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -54,6 +65,7 @@ public class MovementScript : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             transform.position += MovementSpeed * Camera.main.transform.forward * Time.deltaTime;
+            
         }
     }
 
@@ -122,7 +134,7 @@ public class MovementScript : MonoBehaviour
         {
             MovementSpeed = 500;
         }
-        else MovementSpeed = 20;
+        else MovementSpeed = 50;
     }
 
     /// <summary>
@@ -130,11 +142,11 @@ public class MovementScript : MonoBehaviour
     /// </summary>
     public void Crouch()
     {
-        if (Input.GetKey(KeyCode.RightControl))
+        if (Input.GetKey(KeyCode.X))
         {
             MovementSpeed = 5;
         }
-        else MovementSpeed = 20;
+        else MovementSpeed = 50;
     }
 
     /// <summary>
@@ -142,17 +154,23 @@ public class MovementScript : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space)&&Time.time>canJump)
         {
+            velocity = GetComponent<Rigidbody>().velocity;
+            velocity.y = JumpPower;
+            GetComponent<Rigidbody>().velocity = velocity;
+            canJump = Time.time + 1.5f;
             StartCoroutine(StartJumpTimer());
             CanJump = true;
+
         }
     }
     public IEnumerator StartJumpTimer()
     {
-        JumpTrigger = false;
-        yield return new WaitForSeconds(5f);
         JumpTrigger = true;
-
+        yield return new WaitForSeconds(25f);
     }
+
+   
+   
 }
